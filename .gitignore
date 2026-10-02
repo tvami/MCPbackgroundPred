@@ -1,0 +1,10 @@
+*.pyc
+*.pyo
+__pycache__/
+.DS_Store
+HiggsAnalysis/
+twoD-env/
+*.egg-info/
+logs/
+**/notneeded/
+condor_slim_*/
