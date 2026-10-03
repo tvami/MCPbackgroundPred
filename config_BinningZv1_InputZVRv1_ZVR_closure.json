@@ -1,0 +1,60 @@
+{
+    "NAME": "MCP_ZVR",
+    "GLOBAL": {
+        "FILE": "MCP_$process.root",
+        "HIST": "h$region",
+        "HIST_UP": "h$region_$syst_up",
+        "HIST_DOWN": "h$region_$syst_down",
+        "SIGNAME": ["Signal_S0p5_M1000_Q30_ZVR"],
+        "path": "./histograms_for_2DAlphabet_ZVRv1"
+    },
+    "PROCESSES": {
+        "data_obs": {
+            "ALIAS": "Data_ZVR",
+            "TYPE": "DATA",
+            "TITLE": "Z#rightarrow#mu#mu probes (2024 ZMu skim)",
+            "COLOR": "black",
+            "LOC": "path/FILE:HIST",
+            "SCALE": 1,
+            "SYSTEMATICS": []
+        },
+        "SIGNAME": {
+            "TYPE": "SIGNAL",
+            "TITLE": "MCP, M = 1000 GeV, |Q| = 10e (a.u.)",
+            "COLOR": "red",
+            "LOC": "path/FILE:HIST",
+            "SCALE": 1.0,
+            "SYSTEMATICS": ["CMS_MCP_lumi"]
+        }
+    },
+    "REGIONS": {
+        "fail": {"PROCESSES": ["SIGNAME"], "BINNING": "default"},
+        "pass": {"PROCESSES": ["SIGNAME"], "BINNING": "default"}
+    },
+    "BINNING": {
+        "default": {
+            "X": {
+                "NAME": "probQ",
+                "TITLE": "-log_{10}(probQ_{pixel})",
+                "BINS": [0, 0.5, 1.0, 1.5, 2.0, 2.5, 3.0, 3.4, 3.7, 13.0],
+                "SIGSTART": 3.4,
+                "SIGEND": 3.7
+            },
+            "Y": {
+                "NAME": "abseta",
+                "TITLE": "|#eta|",
+                "MIN": 0,
+                "MAX": 1,
+                "NBINS": 1
+            }
+        }
+    },
+    "SYSTEMATICS": {
+        "CMS_MCP_lumi": {"CODE": 0, "VAL": 1.02}
+    },
+    "OPTIONS": {
+        "blindedFit": ["pass"],
+        "blindedPlotsNA": ["pass"],
+        "plotTemplateComparisonsNA": true
+    }
+}

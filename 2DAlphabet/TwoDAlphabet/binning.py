@@ -356,7 +356,8 @@ def stitch_hists_in_x(name,binning,histList,blinded=[]):
     stitched_hist.Reset()
     # Sanity checks
     histListBins = histlist_to_binlist("X",histList)
-    if histListBins != get_bins_from_hist("X",stitched_hist):
+    _tmpl = get_bins_from_hist("X",stitched_hist)
+    if len(histListBins) != len(_tmpl) or any(abs(a-b) > 1e-5*max(1.,abs(b)) for a, b in zip(histListBins, _tmpl)):  # float32 edges
         raise ValueError('X axis bins stitched together from histList are not the same as the input template.\n%s vs %s'%(histListBins,get_bins_from_hist("X",stitched_hist)))
     # Stitch
     bin_jump = 0

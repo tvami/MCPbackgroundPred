@@ -33,7 +33,7 @@ a control sample.
 |---|---|
 | Pass / fail | pixel **sizeX residual** (measured minus angle-predicted cluster size): pass above the working point (currently 1.25), fail below |
 | Fit variable `x` | **`-log10(probQ_pixel)`**; MIPs fall steeply, the MCP sits at large values. Saturated tracks (probQ undefined, all pixel hits at the template floor, `nPixQFloor`) go in the last `x` bin |
-| `y` (optional) | eta region (barrel / endcap), see below |
+| `y` (optional) | track $|\eta|$ bins inside the acceptance, see below |
 | Signal region | JetMET (+ Tau) triggered data, pass region, `x` inside `[SIGSTART, SIGEND)` (the probQ tail, e.g. above 3.4) blinded |
 | Validation regions | the same fit in a JetMET sideband with negligible signal (low MET, or prescaled jet triggers), and in the `x` sideband below `SIGSTART` |
 | MIP reference | Z->mumu tag-and-probe from the Run-3 `ZMu` RAW-RECO skim (`/Muon{0,1}/Run2024*-ZMu-*/RAW-RECO`): `R_P/F(x)` for MIPs, data/MC, stability |
@@ -43,14 +43,14 @@ So the fit predicts the probQ spectrum of sizeX-tagged tracks from the probQ spe
 tracks: `N_pass(x) = R_P/F(x) * N_fail(x)`.
 
 Why Alphabet and not a plain ABCD in the (probQ, sizeX) plane: the two variables are correlated for
-MIPs (rho = 0.2-0.3; the joint tail rate over the product of the single rates is 1.2 in the barrel and
-3.5 in the endcaps), so ABCD does not close. Here that correlation is exactly the `x` dependence of
+MIPs (rho = 0.3 and a joint tail rate 1.17 times the product of the single rates at |eta| < 1), so ABCD
+does not close. Here that correlation is exactly the `x` dependence of
 `R_P/F`, which the polynomial fits, and the Z probes measure it for MIPs directly.
 
 Things to settle before the first fit:
-- the sizeX residual has a barrel/endcap offset for MIPs (median about 1.56 in the barrel, 0.9-1.1 in
-  the endcaps), so with one cut `R_P/F` mostly measures the eta mix. Either use an eta-dependent
-  working point (or a residual corrected per layer), or split the fit in eta with `y`;
+- the tracks are restricted to |eta| < 1 (Punzi optimization). Inside it the sizeX residual of MIPs
+  still varies with eta (median 1.51-1.59) and drifts over 2024 (pass rate 0.87 to 0.81), which
+  `R_P/F` absorbs when fitted on the full dataset;
 - the binning of `x` at large probQ, where the MIP background runs out, and the treatment of the
   saturated bin.
 

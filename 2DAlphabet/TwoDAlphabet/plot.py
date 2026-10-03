@@ -626,7 +626,7 @@ def make_ax_1D(outname, binning, data, bkgs=[], signals=[], title='', subtitle='
     rax.set_ylabel(r'$\frac{Data-Bkg}{\sigma}$')
     axisTitle = binning.xtitle if projn == 'x' else binning.ytitle
     axisTitle = axisTitle.replace("#","\\")
-    rax.set_xlabel(r'${}$ [{}]'.format(axisTitle, units))
+    rax.set_xlabel(r'${}$ [{}]'.format(axisTitle, units) if units else r'${}$'.format(axisTitle))  # no brackets without units
     rax.autoscale(axis='x', tight=True)
     rax.margins(x=0)
 

@@ -8,3 +8,10 @@ twoD-env/
 logs/
 **/notneeded/
 condor_slim_*/
+# fit areas, inputs and run logs
+rpf_*/
+histograms_for_2DAlphabet_*/
+*.log
+*.out
+zvr_suite_*.json
+config_*_x*p0.json
