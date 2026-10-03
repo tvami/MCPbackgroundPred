@@ -12,10 +12,9 @@ XS = os.path.expanduser('~/HSCP-MCP/AN/AN-26-065/Figures/DataAndSignal')
 LUMI_PB = 109.0e3
 ACC = os.environ.get('ACCDIR', SD + '/acc/output')  # signal ntuples
 SAT = os.environ.get('SATCOL', 'nPixHitsUsed')  # saturated: probQ < 0 and SAT > 0 (nPixQFloor as in data)
-IHMIN = float(os.environ.get('IHMIN', '-1e9'))  # high-side requirement on pixel Ih [MeV/cm], default none
 SX, XSAT, XWIN, XEND = 1.25, 12.5, 3.4, 5.0
 NX, XMAX, NY = 260, 13.0, 20
-SIG = '(passMET||passJet||passTau) && highPurity && hasDeDx && pixSizeXresidual>-90 && abs(eta)<1 && genMatched && ih_pixel>%g' % IHMIN
+SIG = '(passMET||passJet||passTau) && highPurity && hasDeDx && pixSizeXresidual>-90 && abs(eta)<1 && genMatched'
 
 def xsec_table(fn):  # (mass, charge in e/3) -> pb
     return {(int(float(r['mass'])), int(float(r['charge']))): float(r['xsec_pb']) for r in csv.DictReader(open(fn))}

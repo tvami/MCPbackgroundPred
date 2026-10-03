@@ -1,5 +1,5 @@
 # 2DAlphabet inputs per region from ntuples v1 (one chunk of files): JVR (JetMET group, pfMET < 100), SR_JetMET (pfMET >= 100),
-# SR_Tau (Tau-only), each without and with the high-side requirement ih_pixel > 4 MeV/cm. SR pass is filled only below x = 3.4.
+# SR_Tau (Tau-only). SR pass is filled only below x = 3.4.
 # usage: python3 make_hists_regions.py <chunk> <nchunks> <outdir>; then hadd per region
 import glob, os, sys
 import ROOT
@@ -16,11 +16,10 @@ df = df.Define('reg', '(%s) ? (pfMET < 100 ? 0 : 1) : ((!(passMET || passJet) &&
 df = df.Filter('reg >= 0')
 hs = {}
 for reg, rname in [(0, 'JVR'), (1, 'SRJetMET'), (2, 'SRTau')]:
-    for ih, iname in [('1', ''), ('ih_pixel > 4', '_ih4')]:
-        d = df.Filter('reg == %d && %s' % (reg, ih))
-        for p, cut in [('pass', 'pixSizeXresidual > 1.25'), ('fail', 'pixSizeXresidual <= 1.25')]:
-            if reg > 0 and p == 'pass': cut += ' && x < 3.4'  # SR stays blind
-            hs[(rname + iname, p)] = d.Filter(cut).Histo2D(('h%s' % p, '', 260, 0, 13, 20, 0, 1), 'xc', 'ae')
+    d = df.Filter('reg == %d' % reg)
+    for p, cut in [('pass', 'pixSizeXresidual > 1.25'), ('fail', 'pixSizeXresidual <= 1.25')]:
+        if reg > 0 and p == 'pass': cut += ' && x < 3.4'  # SR stays blind
+        hs[(rname, p)] = d.Filter(cut).Histo2D(('h%s' % p, '', 260, 0, 13, 20, 0, 1), 'xc', 'ae')
 ROOT.RDF.RunGraphs(list(hs.values()))
 for (r, p), h in hs.items():
     os.makedirs('%s/%s' % (OUT, r), exist_ok=True)

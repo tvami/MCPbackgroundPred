@@ -14,7 +14,7 @@ BENCH = [('S0p5_M1000_Q24', 'M = 1 TeV, |Q| = 8e', ROOT.kRed + 1), ('S0p5_M1000_
          ('S0p5_M2000_Q90', 'M = 2 TeV, |Q| = 30e', ROOT.kViolet + 1)]
 # name, expression (numpy on the column dict), bins, lo, hi, title, expected signal side (cuts try both)
 VARS = [('clch', lambda d: d['pixClCharge'] / 1e3, 50, 0, 500, 'Mean pixel cluster charge [ke]', '>'),
-        ('ih', lambda d: d['ih_pixel'], 50, 0, 50, 'I_{h} (pixel) [MeV/cm]', '>'),
+        ('ih', lambda d: d['ih_pixel'], 50, 0, 50, 'I_{h} (pixel) [MeV/cm]', '>'),  # diagnostic only, never a selection cut
         ('sizex', lambda d: d['pixSizeXresidual'], 50, 1.25, 11.25, 'Pixel sizeX residual', '>'),
         ('sizey', lambda d: d['pixClSizeY'], 40, 0, 20, 'Mean pixel cluster sizeY', '>'),
         ('clmax', lambda d: d['pixClSizeMax'], 40, 0, 40, 'Largest pixel cluster size', '>'),
