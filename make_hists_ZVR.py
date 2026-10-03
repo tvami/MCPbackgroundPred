@@ -8,10 +8,11 @@ ROOT.gROOT.SetBatch(True)
 OUT = sys.argv[1] if len(sys.argv) > 1 else 'histograms_for_2DAlphabet_ZVRv1'
 SD = os.path.expanduser('~/HSCP-MCP/study_data')
 SX, XSAT = 1.25, 12.5
+IHMIN = float(os.environ.get('IHMIN', '-1e9'))  # high-side requirement on pixel Ih [MeV/cm], default none
 NX, XMAX, NY = 260, 13.0, 20  # fine binning: 0.05 in x, 0.05 in |eta|
 PROBE = ('tpOS && tpMass>81 && tpMass<101 && muMatched && highPurity && hasDeDx && pixSizeXresidual>-90'
-         ' && !(passMET||passJet) && abs(eta)<1')
-SIG = '(passMET||passJet||passTau) && highPurity && hasDeDx && pixSizeXresidual>-90 && abs(eta)<1 && genMatched'
+         ' && !(passMET||passJet) && abs(eta)<1 && ih_pixel>%g' % IHMIN)
+SIG = '(passMET||passJet||passTau) && highPurity && hasDeDx && pixSizeXresidual>-90 && abs(eta)<1 && genMatched && ih_pixel>%g' % IHMIN
 
 def done(f):
     lg = os.path.join(os.path.dirname(f), 'cmsrun_' + os.path.basename(f)).replace('.root', '.log')

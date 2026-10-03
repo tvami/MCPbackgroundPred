@@ -520,7 +520,7 @@ def make_ax_1D(outname, binning, data, bkgs=[], signals=[], title='', subtitle='
     bkgNames = list(dict.fromkeys([hist.GetTitle().split(',')[0] for hist in bkgs]))
     sigNames = list(dict.fromkeys([hist.GetTitle().split(',')[0] for hist in signals]))
     # Replace the ROOT latex "#" with standard latex "\" escape character for python rstring
-    bkgNamesLatex = [r'${}$'.format(re.sub(r'^CMS_[A-Z]+\d+_', '', bkgName.replace("#","\\"))) for bkgName in bkgNames] # strip the CMS_<CADI>_ prefix
+    bkgNamesLatex = [r'${}$'.format(re.sub(r'^CMS_[A-Z]+\d*_', '', bkgName.replace("#","\\"))) for bkgName in bkgNames] # strip the CMS_<CADI>_ prefix
     sigNamesLatex = [r'${}$'.format(sigName.replace("#","\\")) for sigName in sigNames]
     # Sum the common backgrounds and signals
     for bkg in bkgNames:
@@ -973,7 +973,7 @@ def plot_correlation_matrix(varsToIgnore, threshold=0, corrText=False, cmsText='
         for axis in (corrMtrx.GetXaxis(), corrMtrx.GetYaxis()):
             for b in range(1, axis.GetNbins()+1):
                 lab = axis.GetBinLabel(b)
-                lab = re.sub(r'^CMS_[A-Z]+\d+_(Background_)?', '', lab)  # strip the CMS_<CADI>_ prefix
+                lab = re.sub(r'^CMS_[A-Z]+\d*_(Background_)?', '', lab)  # strip the CMS_<CADI>_ prefix
                 axis.SetBinLabel(b, lab)
 
         nbins = corrMtrx.GetXaxis().GetNbins()
@@ -1165,7 +1165,7 @@ def plot_gof(tag, subtag, seed=123456, condor=False):
     if condor:
             execute_cmd('rm -r '+tmpdir)
 
-def plot_transfer_funcs(tag, subtag, projection='projx2', savename=None, cmsText='Internal'):
+def plot_transfer_funcs(tag, subtag, projection='projx2', savename=None, cmsText='Internal', xtitle='p_{T} [GeV]'):
     '''Plot the transfer factor (postfit pass/fail ratio) vs pT for one fit area.
 
     Reads the b-only postfit projections from <tag>/<subtag>/plots_fit_b/all_plots.root
@@ -1179,6 +1179,7 @@ def plot_transfer_funcs(tag, subtag, projection='projx2', savename=None, cmsText
         savename (str, optional): output path stem (no extension). Defaults to
             <tag>/<subtag>/transfer_func.
         cmsText (str, optional): sublabel drawn after 'CMS'. Defaults to 'Internal'.
+        xtitle (str, optional): x-axis title. Defaults to 'p_{T} [GeV]'.
     '''
     rundir = tag+'/'+subtag
     fpath = rundir+'/plots_fit_b/all_plots.root'
@@ -1212,7 +1213,7 @@ def plot_transfer_funcs(tag, subtag, projection='projx2', savename=None, cmsText
     h_ratio.SetLineColor(ROOT.kBlack)
     h_ratio.SetLineWidth(2)
     h_ratio.SetMarkerStyle(0)
-    h_ratio.GetXaxis().SetTitle('p_{T} [GeV]')
+    h_ratio.GetXaxis().SetTitle(xtitle)
     h_ratio.GetYaxis().SetTitle('Transfer Factor')
     h_ratio.GetXaxis().SetTitleSize(0.045)
     h_ratio.GetYaxis().SetTitleSize(0.045)
@@ -1243,7 +1244,7 @@ def plot_transfer_funcs(tag, subtag, projection='projx2', savename=None, cmsText
     latex.DrawLatex(0.19,0.93,"CMS")
     latex.SetTextFont(52)
     latex.SetTextSize(0.04)
-    latex.DrawLatex(0.26,0.93,cmsText)
+    latex.DrawLatex(0.30,0.93,cmsText)
 
     c.RedrawAxis()
     if savename is None:
