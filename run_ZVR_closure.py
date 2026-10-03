@@ -57,7 +57,7 @@ def fit_and_plot(tf, rMax=10):
         lumi = r'%.1f $fb^{-1}$ (13.6 TeV)' % json.load(open(lj))['lumi_shown_fb'] if os.path.exists(lj) else '(13.6 TeV)'
         twoD.StdPlots(area, subset, lumiText=lumi,
                       pf_slice_str={'fail': 'sizeX residual #leq 1.25', 'pass': 'sizeX residual > 1.25'}, units='')
-        plot.plot_transfer_funcs(workingArea, area)
+        plot.plot_transfer_funcs(workingArea, area, cmsText='Work in Progress', xtitle='-log_{10}(probQ_{pixel})')
     except Exception as e:
         print('plotting failed for %s: %s' % (tf, e))
     closure(area)
@@ -114,6 +114,18 @@ def gof(tf, ntoys=300):
     plot.plot_gof(workingArea, area, condor=False)
     res = open('{}/{}/gof_results.txt'.format(workingArea, area)).read().replace('\n', ' ')
     print('GOF %s %s' % (area, res))
+
+def replot(tf):
+    """projections + TF only, from an existing fit"""
+    import json
+    twoD = TwoDAlphabet(workingArea, '{}/runConfig.json'.format(workingArea), loadPrevious=True)
+    subset = twoD.ledger.select(_select_signal, SIGNAL, tf)
+    area = '{}-{}_area'.format(SIGNAL, tf)
+    lj = os.path.join(os.path.dirname(os.path.abspath(configJSON)), json.load(open(configJSON))['GLOBAL']['path'], 'lumi_shown.json')
+    lumi = r'%.1f $fb^{-1}$ (13.6 TeV)' % json.load(open(lj))['lumi_shown_fb'] if os.path.exists(lj) else '(13.6 TeV)'
+    twoD.StdPlots(area, subset, lumiText=lumi,
+                  pf_slice_str={'fail': 'sizeX residual #leq 1.25', 'pass': 'sizeX residual > 1.25'}, units='')
+    plot.plot_transfer_funcs(workingArea, area, cmsText='Work in Progress', xtitle='-log_{10}(probQ_{pixel})')
 
 if __name__ == '__main__':
     make_workspace()
